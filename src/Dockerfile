@@ -2,10 +2,10 @@
 FROM python:3.10
 
 # Set working directory
-WORKDIR /app
+WORKDIR /src
 
 # Copy project files
-COPY . /app
+COPY . /src
 
 # Install dependencies
 RUN pip install --upgrade pip && pip install --no-cache-dir -r requirements.txt
