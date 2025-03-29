@@ -1,27 +1,23 @@
-# Use a base Python image
+# Use a base image with Python
 FROM python:3.10
 
-# Set the working directory
+# Set working directory
 WORKDIR /app
 
-# Copy the current directory contents into the container
+# Copy project files
 COPY . /app
 
-# Install dependencies inside a virtual environment
-RUN python -m venv /venv
-ENV PATH="/venv/bin:$PATH"
-
-# Upgrade pip and install requirements
+# Install dependencies
 RUN pip install --upgrade pip && pip install --no-cache-dir -r requirements.txt
 
 # Install Ollama
 RUN curl -fsSL https://ollama.com/install.sh | sh
 
-# Start Ollama in the background, then pull the model
+# Ensure Ollama service starts before pulling the model
 RUN ollama serve & sleep 5 && ollama pull tinyllama:1.1b
 
-# Expose the port (if needed)
+# Expose port if needed
 EXPOSE 5000
 
-# Run the app
+# Run Ollama in the background before starting the app
 CMD ["bash", "-c", "ollama serve & sleep 5 && python myapp.py"]
