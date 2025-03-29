@@ -1,23 +1,27 @@
-# Use a Python base image
-FROM python:3.11
+# Use a base Python image
+FROM python:3.10
 
-# Set the working directory inside the container
+# Set the working directory
 WORKDIR /app
+
+# Copy the current directory contents into the container
+COPY . /app
+
+# Install dependencies inside a virtual environment
+RUN python -m venv /venv
+ENV PATH="/venv/bin:$PATH"
+
+# Upgrade pip and install requirements
+RUN pip install --upgrade pip && pip install --no-cache-dir -r requirements.txt
 
 # Install Ollama
 RUN curl -fsSL https://ollama.com/install.sh | sh
 
-# Add Ollama to PATH (if needed)
-ENV PATH="/root/.ollama/bin:$PATH"
+# Start Ollama in the background, then pull the model
+RUN ollama serve & sleep 5 && ollama pull tinyllama:1.1b
 
-# Copy all project files to the container
-COPY . .
+# Expose the port (if needed)
+EXPOSE 5000
 
-# Install dependencies
-RUN pip install --no-cache-dir -r requirements.txt
-
-# Pull the TinyLlama model
-RUN ollama pull tinyllama:1.1b
-
-# Set the default command to run your app
-CMD ["python", "myapp.py"]
+# Run the app
+CMD ["bash", "-c", "ollama serve & sleep 5 && python myapp.py"]
