@@ -20,4 +20,4 @@ RUN pip install --no-cache-dir -r requirements.txt
 RUN ollama pull tinyllama:1.1b
 
 # Set the default command to run your app
-CMD ["python", "app.py"]
+CMD ["python", "myapp.py"]
