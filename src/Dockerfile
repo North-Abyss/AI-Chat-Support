@@ -13,6 +13,9 @@ RUN pip install --upgrade pip && pip install --no-cache-dir -r requirements.txt
 # Install Ollama
 RUN curl -fsSL https://ollama.com/install.sh | sh
 
+# Pull TinyLlama model
+RUN ollama pull tinyllama:1.1b
+
 # Expose port if needed
 EXPOSE 5000
 
