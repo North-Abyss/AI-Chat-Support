@@ -14,7 +14,7 @@ RUN pip install --upgrade pip && pip install --no-cache-dir -r requirements.txt
 RUN curl -fsSL https://ollama.com/install.sh | sh
 
 # Start Ollama in the background and wait for it to initialize
-RUN bash -c "ollama serve & sleep 5"
+RUN bash -c "ollama serve "
 
 # Pull a valid model (change to "mistral" if TinyLlama is unavailable)
 RUN ollama pull tinyllama:1.1b
