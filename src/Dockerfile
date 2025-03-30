@@ -13,11 +13,11 @@ RUN pip install --upgrade pip && pip install --no-cache-dir -r requirements.txt
 # Install Ollama
 RUN curl -fsSL https://ollama.com/install.sh | sh
 
-# Pull TinyLlama model
-CMD ["ollama","pull","tinyllama:1.1b"]
+# Pull a valid model (Change "mistral" if needed)
+RUN ollama pull mistral
 
 # Expose port if needed
 EXPOSE 5000
 
 # Start Ollama service and ensure it's ready before running the app
-CMD ["bash", "-c", "ollama serve & while ! ollama list >/dev/null 2>&1; do sleep 1; done && python myapp.py"]
+CMD ["bash", "-c", "ollama serve & sleep 5 && python myapp.py"]
