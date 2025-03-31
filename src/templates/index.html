@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AI Chat Support</title>
     <style>
-        /* Global Dark Mode Theme */
         * {
             box-sizing: border-box;
             margin: 0;
@@ -32,40 +31,34 @@
             overflow: hidden;
         }
         .chat-box {
-    flex-grow: 1;
-    overflow-y: auto;
-    padding: 15px;
-    display: flex;
-    flex-direction: column; /* Ensures messages appear on a new line */
-    scrollbar-width: thin;
-    scrollbar-color: #666 #222;
-}
-
-.chat-message {
-    display: inline-block; /* Allows messages to wrap properly */
-    max-width: 80%; /* Prevents messages from stretching full width */
-    word-wrap: break-word;
-    margin: 10px 0;
-    padding: 10px;
-    border-radius: 10px;
-}
-
-/* User (Blue Neon) */
-.chat-message.user {
-    align-self: flex-end; /* Aligns the user message to the right */
-    border: 2px solid #00bfff;
-    box-shadow: 0 0 8px #00bfff;
-    color: white; /* White text */
-}
-
-/* AI Bot (Red Neon) */
-.chat-message.bot {
-    align-self: flex-start; /* Aligns bot messages to the left */
-    border: 2px solid #ff4500;
-    box-shadow: 0 0 8px #ff4500;
-    color: white; /* White text */
-}
-
+            flex-grow: 1;
+            overflow-y: auto;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            scrollbar-width: thin;
+            scrollbar-color: #666 #222;
+        }
+        .chat-message {
+            display: inline-block;
+            max-width: 80%;
+            word-wrap: break-word;
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 10px;
+        }
+        .chat-message.user {
+            align-self: flex-end;
+            border: 2px solid #00bfff;
+            box-shadow: 0 0 8px #00bfff;
+            color: white;
+        }
+        .chat-message.bot {
+            align-self: flex-start;
+            border: 2px solid #ff4500;
+            box-shadow: 0 0 8px #ff4500;
+            color: white;
+        }
         .chat-input {
             display: flex;
             padding: 10px;
@@ -111,7 +104,7 @@
     </div>
 
     <script>
-        function askAI() {
+        async function askAI() {
             let query = document.getElementById("query").value.trim();
             if (!query) {
                 alert("Please enter a message.");
@@ -125,25 +118,23 @@
             chatBox.innerHTML += '<div class="chat-message bot"><div>🤖 Thinking...</div></div>';
             chatBox.scrollTop = chatBox.scrollHeight;
 
-            fetch("/ask", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ query: query })
-            })
-            .then(response => response.json())
-            .then(data => {
-                let formattedResponse = `
-                    <strong>🔹 Summary:</strong> ${data["Summary"]} <br>
-                    <strong>📌 Department:</strong> ${data["Department"]} <br>
-                    <strong>💡 Suggested Resolution:</strong> ${data["Suggested Resolution"]} <br>
-                    <strong>⏳ Estimated Resolution Time:</strong> ${data["Estimated Resolution Time"]}
-                `;
-                appendMessage("bot", formattedResponse);
-            })
-            .catch(error => {
-                appendMessage("bot", "⚠️ Error: Unable to process your request.");
+            try {
+                let response = await fetch("/ask", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ message: query })
+                });
+
+                let data = await response.json();
+                if (data.response) {
+                    appendMessage("bot", data.response);
+                } else {
+                    appendMessage("bot", "⚠️ Error: Unable to process your request.");
+                }
+            } catch (error) {
+                appendMessage("bot", "⚠️ Error: Unable to connect to AI.");
                 console.error("Error:", error);
-            });
+            }
         }
 
         function appendMessage(sender, text) {
@@ -163,3 +154,4 @@
     </script>
 </body>
 </html>
+
