@@ -3,6 +3,7 @@
 Welcome to the official repository for our hackathon project: **AI-Driven Customer Support with Multi-Agents**. This project is part of the **Hack the Future: A Gen AI Sprint Powered by Data**, where we leverage AI-powered multi-agent systems to enhance customer service experiences.
 
 ## 🚀 Project Overview
+It start from the src - Source folder 
 Our goal is to build an AI-driven customer support system using multiple agents that can:
 - Handle customer queries efficiently
 - Provide real-time responses using generative AI
@@ -27,11 +28,9 @@ Our goal is to build an AI-driven customer support system using multiple agents 
 ```
 ├── docs/             # Documentation & research papers
 ├── src/              # Source code for AI agents
-│   ├── agents/       # Individual agent implementations
 │   ├── models/       # AI models and training scripts
 │   ├── data/         # Customer interaction data & processing scripts
 │   ├── api/          # Backend API for customer support interactions
-├── notebooks/        # Jupyter notebooks for testing & training
 ├── tests/            # Unit tests & integration tests
 ├── .github/          # CI/CD workflows
 └── README.md         # Project overview & instructions
